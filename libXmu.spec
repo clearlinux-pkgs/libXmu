@@ -4,7 +4,7 @@
 #
 Name     : libXmu
 Version  : 1.1.2
-Release  : 5
+Release  : 6
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.2.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.2.tar.gz
 Summary  : Mini Xmu Library
