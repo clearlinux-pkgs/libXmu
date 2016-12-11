@@ -4,7 +4,7 @@
 #
 Name     : libXmu
 Version  : 1.1.2
-Release  : 6
+Release  : 7
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.2.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.2.tar.gz
 Summary  : Mini Xmu Library
@@ -29,6 +29,7 @@ may be layered on top of any proprietary implementation of Xlib or Xt.
 Summary: dev components for the libXmu package.
 Group: Development
 Requires: libXmu-lib
+Provides: libXmu-devel
 
 %description dev
 dev components for the libXmu package.
@@ -54,10 +55,15 @@ lib components for the libXmu package.
 %setup -q -n libXmu-1.1.2
 
 %build
+export LANG=C
 %configure --disable-static
-make V=1 %{?_smp_mflags}
+make V=1  %{?_smp_mflags}
 
 %check
+export LANG=C
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
@@ -92,8 +98,10 @@ rm -rf %{buildroot}
 /usr/include/X11/Xmu/WinUtil.h
 /usr/include/X11/Xmu/Xct.h
 /usr/include/X11/Xmu/Xmu.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libXmu.so
+/usr/lib64/libXmuu.so
+/usr/lib64/pkgconfig/xmu.pc
+/usr/lib64/pkgconfig/xmuu.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -101,4 +109,7 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libXmu.so.6
+/usr/lib64/libXmu.so.6.2.0
+/usr/lib64/libXmuu.so.1
+/usr/lib64/libXmuu.so.1.0.0
