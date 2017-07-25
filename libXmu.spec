@@ -4,7 +4,7 @@
 #
 Name     : libXmu
 Version  : 1.1.2
-Release  : 9
+Release  : 10
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.2.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.2.tar.gz
 Summary  : Mini Xmu Library
@@ -49,6 +49,7 @@ dev components for the libXmu package.
 Summary: dev32 components for the libXmu package.
 Group: Default
 Requires: libXmu-lib32
+Requires: libXmu-dev
 
 %description dev32
 dev32 components for the libXmu package.
@@ -85,32 +86,42 @@ cp -a libXmu-1.1.2 build32
 popd
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
+export SOURCE_DATE_EPOCH=1500993210
+export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
+export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
+export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
 pushd ../build32/
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export CFLAGS="$CFLAGS -m32"
 export CXXFLAGS="$CXXFLAGS -m32"
 export LDFLAGS="$LDFLAGS -m32"
-%configure --disable-static   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+%configure --disable-static    --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make V=1  %{?_smp_mflags}
 popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
+export SOURCE_DATE_EPOCH=1500993210
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
 then
 pushd %{buildroot}/usr/lib32/pkgconfig
-for i in *.pc ; do mv $i 32$i ; done
+for i in *.pc ; do ln -s $i 32$i ; done
 popd
 fi
 popd
@@ -155,6 +166,8 @@ popd
 /usr/lib32/libXmuu.so
 /usr/lib32/pkgconfig/32xmu.pc
 /usr/lib32/pkgconfig/32xmuu.pc
+/usr/lib32/pkgconfig/xmu.pc
+/usr/lib32/pkgconfig/xmuu.pc
 
 %files doc
 %defattr(-,root,root,-)
