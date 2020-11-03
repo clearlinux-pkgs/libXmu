@@ -6,10 +6,10 @@
 #
 Name     : libXmu
 Version  : 1.1.3
-Release  : 16
+Release  : 17
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.3.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.3.tar.gz
-Source1 : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.3.tar.gz.sig
+Source1  : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.3.tar.gz.sig
 Summary  : Mini Xmu Library
 Group    : Development/Tools
 License  : MIT-Opengroup
@@ -95,6 +95,7 @@ license components for the libXmu package.
 
 %prep
 %setup -q -n libXmu-1.1.3
+cd %{_builddir}/libXmu-1.1.3
 pushd ..
 cp -a libXmu-1.1.3 build32
 popd
@@ -104,14 +105,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1568868362
+export SOURCE_DATE_EPOCH=1604442664
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export FCFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export FFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
 export CXXFLAGS="$CXXFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
 %configure --disable-static
 make  %{?_smp_mflags}
@@ -130,15 +131,15 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1568868362
+export SOURCE_DATE_EPOCH=1604442664
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libXmu
-cp COPYING %{buildroot}/usr/share/package-licenses/libXmu/COPYING
+cp %{_builddir}/libXmu-1.1.3/COPYING %{buildroot}/usr/share/package-licenses/libXmu/c8393cf1f0be1f696d61071e496c807c35150962
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -212,4 +213,4 @@ popd
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/libXmu/COPYING
+/usr/share/package-licenses/libXmu/c8393cf1f0be1f696d61071e496c807c35150962
