@@ -5,16 +5,15 @@
 # Source0 file verified with key 0xCFDF148828C642A7 (alanc@freedesktop.org)
 #
 Name     : libXmu
-Version  : 1.1.3
-Release  : 17
-URL      : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.3.tar.gz
-Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.3.tar.gz
-Source1  : http://xorg.freedesktop.org/releases/individual/lib/libXmu-1.1.3.tar.gz.sig
+Version  : 1.1.4
+Release  : 18
+URL      : https://www.x.org/releases/individual/lib/libXmu-1.1.4.tar.gz
+Source0  : https://www.x.org/releases/individual/lib/libXmu-1.1.4.tar.gz
+Source1  : https://www.x.org/releases/individual/lib/libXmu-1.1.4.tar.gz.sig
 Summary  : Mini Xmu Library
 Group    : Development/Tools
-License  : MIT-Opengroup
+License  : MIT
 Requires: libXmu-lib = %{version}-%{release}
-Requires: libXmu-license = %{version}-%{release}
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
@@ -70,7 +69,6 @@ doc components for the libXmu package.
 %package lib
 Summary: lib components for the libXmu package.
 Group: Libraries
-Requires: libXmu-license = %{version}-%{release}
 
 %description lib
 lib components for the libXmu package.
@@ -79,25 +77,16 @@ lib components for the libXmu package.
 %package lib32
 Summary: lib32 components for the libXmu package.
 Group: Default
-Requires: libXmu-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the libXmu package.
 
 
-%package license
-Summary: license components for the libXmu package.
-Group: Default
-
-%description license
-license components for the libXmu package.
-
-
 %prep
-%setup -q -n libXmu-1.1.3
-cd %{_builddir}/libXmu-1.1.3
+%setup -q -n libXmu-1.1.4
+cd %{_builddir}/libXmu-1.1.4
 pushd ..
-cp -a libXmu-1.1.3 build32
+cp -a libXmu-1.1.4 build32
 popd
 
 %build
@@ -105,20 +94,20 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1604442664
+export SOURCE_DATE_EPOCH=1666048351
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
-export FCFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
-export FFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export CFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=auto -fno-semantic-interposition "
+export FCFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=auto -fno-semantic-interposition "
+export FFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=auto -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=auto -fno-semantic-interposition "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 pushd ../build32/
-export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/share/pkgconfig"
 export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
@@ -136,15 +125,19 @@ cd ../build32;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1604442664
+export SOURCE_DATE_EPOCH=1666048351
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/package-licenses/libXmu
-cp %{_builddir}/libXmu-1.1.3/COPYING %{buildroot}/usr/share/package-licenses/libXmu/c8393cf1f0be1f696d61071e496c807c35150962
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
 then
 pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do ln -s $i 32$i ; done
+popd
+fi
+if [ -d %{buildroot}/usr/share/pkgconfig ]
+then
+pushd %{buildroot}/usr/share/pkgconfig
 for i in *.pc ; do ln -s $i 32$i ; done
 popd
 fi
@@ -210,7 +203,3 @@ popd
 /usr/lib32/libXmu.so.6.2.0
 /usr/lib32/libXmuu.so.1
 /usr/lib32/libXmuu.so.1.0.0
-
-%files license
-%defattr(0644,root,root,0755)
-/usr/share/package-licenses/libXmu/c8393cf1f0be1f696d61071e496c807c35150962
