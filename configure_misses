@@ -1,6 +1,9 @@
 Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: gcc options needed to detect all undeclared functions
+Configure miss: glib-2.0 >= 2.46
+Configure miss: glib-2.0 >= 2.46
+Configure miss: glib-2.0 >= 2.46
 Configure miss: i686-generic-linux-gnu-file
 Configure miss: x86_64-generic-linux-gnu-file
 Configure miss: x86_64-generic-linux-gnu-file

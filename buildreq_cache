@@ -1,6 +1,5 @@
-1.2.0
+1.2.1
 file
-glib-dev
 libxslt-bin
 pkg-config
 pkgconfig(32xorg-macros)
